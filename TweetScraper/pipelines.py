@@ -52,5 +52,5 @@ class SaveToFilePipeline(object):
                 item - a dict like object
                 fname - where to save
         '''
-        with open(fname, 'w', encoding='utf-8') as f:
+        with open(fname + '.json', 'w', encoding='utf-8') as f:
             json.dump(dict(item), f, ensure_ascii=False)

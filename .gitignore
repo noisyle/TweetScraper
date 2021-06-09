@@ -1,5 +1,6 @@
 Data/
 pyenv/
+Driver/
 
 geckodriver.log
 
