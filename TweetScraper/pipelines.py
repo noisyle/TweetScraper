@@ -58,7 +58,7 @@ class SaveToFilePipeline(object):
             json.dump(dict(item), f, ensure_ascii=False)
 
 
-class ImgflipPipeline(ImagesPipeline):
+class SaveImagePipeline(ImagesPipeline):
     ''' pipeline that save image to disk '''
 
     def get_media_requests(self, item, info):
