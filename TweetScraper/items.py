@@ -10,5 +10,6 @@ class User(Item):
     raw_data = Field()
 
 class Image(Item):
+    query = Field()
     image_ids = Field()
     image_urls = Field()

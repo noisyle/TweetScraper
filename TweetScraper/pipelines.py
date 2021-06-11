@@ -69,5 +69,5 @@ class SaveImagePipeline(ImagesPipeline):
 
 
     def file_path(self, request, response=None, info=None, *, item=None):
-        return f'%s.jpg' % request.meta['image_id']
+        return f'{item["query"]}/%s.jpg' % request.meta['image_id']
 

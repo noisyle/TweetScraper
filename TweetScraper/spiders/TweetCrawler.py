@@ -41,12 +41,12 @@ class TweetScraper(CrawlSpider):
             f'&include_ext_media_availability=true'
             f'&send_error_codes=true'
             f'&simple_quoted_tweet=true'
+            f'&tweet_search_mode=live'
+            f'&count=20'
             f'&query_source=typeahead_click'
             f'&pc=1'
             f'&spelling_corrections=1'
             f'&ext=mediaStats%2ChighlightedLabel'
-            f'&count=20'
-            f'&tweet_search_mode=live'
         )
         self.url = self.url + '&q={query}'
         self.query = query
@@ -162,6 +162,7 @@ class TweetScraper(CrawlSpider):
         for i, v in enumerate(items):
             if v['type'] == 'photo':
                 image = Image()
+                image['query'] = self.query
                 image['image_ids'] = [v['id_str']]
                 image['image_urls'] = [v['media_url']]
                 yield image
