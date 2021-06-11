@@ -8,3 +8,7 @@ class Tweet(Item):
 class User(Item):
     id_ = Field()
     raw_data = Field()
+
+class Image(Item):
+    image_ids = Field()
+    image_urls = Field()

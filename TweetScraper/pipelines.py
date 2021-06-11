@@ -1,9 +1,11 @@
 import os, logging, json
 from scrapy.utils.project import get_project_settings
 
-from TweetScraper.items import Tweet, User
+from TweetScraper.items import Tweet, User, Image
 from TweetScraper.utils import mkdirs
 
+from scrapy.pipelines.images import ImagesPipeline
+from scrapy import Request
 
 logger = logging.getLogger(__name__)
 SETTINGS = get_project_settings()
@@ -54,3 +56,18 @@ class SaveToFilePipeline(object):
         '''
         with open(fname + '.json', 'w', encoding='utf-8') as f:
             json.dump(dict(item), f, ensure_ascii=False)
+
+
+class ImgflipPipeline(ImagesPipeline):
+    ''' pipeline that save image to disk '''
+
+    def get_media_requests(self, item, info):
+        if isinstance(item, Image):
+            image_ids = item['image_ids']
+            for i, url in enumerate(item['image_urls']):
+                yield Request(url, meta={'image_id': image_ids[i]})
+
+
+    def file_path(self, request, response=None, info=None, *, item=None):
+        return f'%s.jpg' % request.meta['image_id']
+

@@ -7,7 +7,7 @@ from scrapy.shell import inspect_response
 from scrapy.core.downloader.middleware import DownloaderMiddlewareManager
 from scrapy_selenium import SeleniumRequest, SeleniumMiddleware
 
-from TweetScraper.items import Tweet, User
+from TweetScraper.items import Tweet, User, Image
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class TweetScraper(CrawlSpider):
             f'&include_ext_media_availability=true'
             f'&send_error_codes=true'
             f'&simple_quoted_tweet=true'
-            f'&query_source=typed_query'
+            f'&query_source=typeahead_click'
             f'&pc=1'
             f'&spelling_corrections=1'
             f'&ext=mediaStats%2ChighlightedLabel'
@@ -125,6 +125,12 @@ class TweetScraper(CrawlSpider):
         data = json.loads(response.text)
         for item in self.parse_tweet_item(data['globalObjects']['tweets']):
             yield item
+            try:
+                entities = item['raw_data']['entities']
+                if 'media' in entities:
+                    yield from self.parse_image_item(entities['media'])
+            except Exception as e:
+                logger.info('fetch image failed!', str(e))
         for item in self.parse_user_item(data['globalObjects']['users']):
             yield item
 
@@ -150,3 +156,12 @@ class TweetScraper(CrawlSpider):
             user['id_'] = k
             user['raw_data'] = v
             yield user
+
+
+    def parse_image_item(self, items):
+        for i, v in enumerate(items):
+            if v['type'] == 'photo':
+                image = Image()
+                image['image_ids'] = [v['id_str']]
+                image['image_urls'] = [v['media_url']]
+                yield image
