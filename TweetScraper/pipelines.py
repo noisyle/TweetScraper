@@ -69,5 +69,5 @@ class SaveImagePipeline(ImagesPipeline):
 
 
     def file_path(self, request, response=None, info=None, *, item=None):
-        return f'{item["query"]}/%s.jpg' % request.meta['image_id']
+        return '{}/{}_{}.jpg'.format(item["query"], item["tweet_url"].replace('://', '_').replace('/', '_'), request.meta['image_id'])
 

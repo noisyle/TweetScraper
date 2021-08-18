@@ -13,3 +13,4 @@ class Image(Item):
     query = Field()
     image_ids = Field()
     image_urls = Field()
+    tweet_url = Field()

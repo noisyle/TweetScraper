@@ -165,4 +165,5 @@ class TweetScraper(CrawlSpider):
                 image['query'] = self.query
                 image['image_ids'] = [v['id_str']]
                 image['image_urls'] = [v['media_url']]
+                image['tweet_url'] = v['url']
                 yield image
